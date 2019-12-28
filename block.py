@@ -96,4 +96,9 @@ class Block(object):
         """
         return self.y*height
 
-    
+    @property
+    def pos(self):
+        """
+        Get the current block position.
+        """
+        return Pos(self.x, self.y) 
