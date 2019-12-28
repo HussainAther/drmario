@@ -51,3 +51,15 @@ class Block(object):
         Get the information about a block.
         """
         return "Block ({}, {}) color: {} falling: {}".format(self.x, self.y, self.color, self.falling)
+
+    def isclear(self):
+        """
+        Is the block clear?
+        """
+        return self.color == color.clear
+ 
+    def isfalling(self):
+        """
+        Is the block falling?
+        """
+        return self.falling
