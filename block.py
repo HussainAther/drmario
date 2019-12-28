@@ -29,4 +29,7 @@ class Block(object):
         Set the color of the block from clear to
         another color.
         """
-        
+        if self.color != Color.clear:
+            raise InvalidOperation("Trying to set color on a colored block.")
+        if color != Color.blue and color != color.red and color != color.yellow:
+            raise InvalidParameter("Invalid color value: {}".format(color))
