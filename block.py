@@ -39,3 +39,15 @@ class Block(object):
         Clear the color.
         """
         self.color = Color.clear
+
+    def setfalling(self, falling):
+        """
+        Set a piece as falling.
+        """
+        self.falling = falling
+
+    def __repr__(self):
+        """
+        Get the information about a block.
+        """
+        return "Block ({}, {}) color: {} falling: {}".format(self.x, self.y, self.color, self.falling)
