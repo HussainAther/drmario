@@ -102,3 +102,10 @@ class Block(object):
         Get the current block position.
         """
         return Pos(self.x, self.y) 
+
+    @property
+    def color(self):
+        """
+        Get the block color.
+        """
+        return self.color
