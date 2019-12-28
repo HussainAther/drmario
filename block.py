@@ -1,3 +1,6 @@
+width = 20
+height = 14
+
 class Color(object):
     """
     Give the object a color depending on how it spawns
@@ -63,3 +66,34 @@ class Block(object):
         Is the block falling?
         """
         return self.falling
+
+    @property
+    def x(self):
+        """
+        Return x-coordinate of the block.
+        """
+        return self.x
+
+    @property
+    def y(self):
+        """
+        Return y-coordinate of the block.
+        """
+        return self.y
+
+    @property
+    def xpixels(self):
+        """
+        Get the number of pixels on the screen in the
+        x-direction.
+        """
+        return self.x*width
+ 
+    @property
+    def ypixels(self):
+        """
+        In the y-direction 
+        """
+        return self.y*height
+
+    
