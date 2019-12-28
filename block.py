@@ -23,3 +23,10 @@ class Block(object):
         self.falling = False
         if color:
             self.setcolor(color)
+
+    def setcolor(self, color):
+        """
+        Set the color of the block from clear to
+        another color.
+        """
+        
