@@ -1,6 +1,13 @@
 width = 20
 height = 14
 
+"""
+Coding the blocks is straightforward with a position and color
+as well as status for cleared and falling for each one. Here we define
+properties of the blocks themselves that can be used later for creating
+vitamins.
+"""
+
 class Color(object):
     """
     Give the object a color depending on how it spawns
