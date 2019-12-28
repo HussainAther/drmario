@@ -33,3 +33,9 @@ class Block(object):
             raise InvalidOperation("Trying to set color on a colored block.")
         if color != Color.blue and color != color.red and color != color.yellow:
             raise InvalidParameter("Invalid color value: {}".format(color))
+
+    def clear(self):
+        """
+        Clear the color.
+        """
+        self.color = Color.clear
