@@ -10,7 +10,7 @@ import sys
 # from pygame, the colors from colors.py, and the Pos (position) function from 
 # utils.py
 from board import Board
-from pygame.constants import KEYUP, KEYDOWN, K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP, QUIT 
+from pygame.constants import KEYUP, KEYDOWN, K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP, K_q, QUIT 
 from colors import black, blue, brightred, brightgreen, darkblue, darkgray, green, red, white, yellow
 from utils import Pos
 
@@ -38,11 +38,13 @@ def gameintro(self):
         title = titlefont.render("Dr. Mario", 36, (255, 255, 255))
         instruction1 = instructionfont.render("Use arrow keys to move", 1, (255, 255, 255))
         instruction2 = instructionfont.render("and space to rotate.", 1, (255, 255, 255))
-        starttext = startfont.render("Press space to start.", 1, (255, 255, 255))
+        starttext1 = startfont.render("Press space to start", 1, (255, 255, 255))
+        starttext2 = startfont.render("and q to quit.", 1, (255, 255, 255))
         self._display.blit(title, (20, 100))
         self._display.blit(instruction1, (20, 150))
         self._display.blit(instruction2, (20, 170))
-        self._display.blit(starttext, (20, 300))
+        self._display.blit(starttext1, (20, 300))
+        self._display.blit(starttext2, (20, 320))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == KEYDOWN and event.key == K_SPACE:
@@ -121,6 +123,9 @@ class Game(object):
                 self.speed = True
             elif event.key == K_SPACE:
                 self.board.rotatedublock()
+            elif event.key == K_q:
+               pygame.quit()
+               sys.exit()
         elif event.type == KEYUP:
             if event.key == K_DOWN:
                 self.speed = False
