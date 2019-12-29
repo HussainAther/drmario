@@ -190,4 +190,19 @@ class Board(object):
          try:
              leftblock = self.block(block.x-1, block.y-1)
          except OutOfBoard:
-             pass     
+             pass    
+         if (bottomblock.isclear() or bottomblock.isfalliang()) and \
+              (not rightblock or rightblock.isclear()) and \
+              (not leftblock or leftblock.isclear()):
+             block.setfalling(True)
+             return True
+         return False
+
+    def getfallingblocks(self):
+        """
+        Get the blocks that are falling by checking their
+        .isfalling() status.
+        """
+        return [block for rows in reversed(self.board)
+                for block in rows
+                if block.isfalling()] 
