@@ -1,6 +1,6 @@
-import pygame
 import random
 
+from pygame import Surface
 from src.block import block, color
 from src.colors import black, blue, darkblue, darkgray, red, white, yellow
 from src.dublock import dublock
@@ -14,8 +14,6 @@ with a starting setup and allow blocks to fall as they do.
 
 width = 10
 height = 20
-widthpixels = 140
-heightpixels = 400
 spawnpos = Pos(x=3, y=0)
 
 class Board(object):
@@ -27,7 +25,7 @@ class Board(object):
         """
         Initialize the display and board for the game.
         """
-        self.display = pygame.Surface((140, 400))
+        self.display = Surface((140, 400))
         self.board = []
         for h in range(0, height):
             self.board.append([])
