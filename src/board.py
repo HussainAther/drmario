@@ -1,6 +1,12 @@
 import pygame
 import random
 
+from src.exceptions import BottomReached, InvalidOperation, InvalidParameter, OutOfBoard, PositionOccupied
+from src.block import block, color
+from src.2block import 2block
+from src.colors import black, blue, darkblue, darkgray, red, white, yellow
+from src.utils import Pos
+
 """
 Create the board. We want to use the blocks to fill up the board
 with a starting setup and allow blocks to fall as they do.
@@ -8,8 +14,8 @@ with a starting setup and allow blocks to fall as they do.
 
 width = 10
 height = 20
-widthpixels = width*drpython.block.width
-heightpixels = height*drpython.block.height
+widthpixels = width*drmario.block.width
+heightpixels = height*drmario.block.height
 spawnpos = Pos(x=3, y=0)
 
 class Board(object):
@@ -26,10 +32,10 @@ class Board(object):
         for h in range(0, height):
             self.board.append([])
             for w in range(0, width):
-                self.board[h].append(Block(w, h))
-        self.block = None
+                self.board[h].append(block(w, h))
+        self.2block = None
 
-    def spawnblocks(self):
+    def spawn2blocks(self):
         """
         Spawn the blocks from the spawn position.
         """
@@ -47,12 +53,13 @@ class Board(object):
                   random.randint(1, 3))
         for i in (0, 1): # Set the block colors.
             blocks[i].setcolor(colors[i])
- 
-    def moveblock(self, direction):
+        self.2blocks = 2block(blocks)
+          
+    def move2block(self, direction):
         """
         Move the block in a direction.
         """
-        a, b = self.block.blocks
+        a, b = self.2block.blocks
         directdict = {"down" : (0, 1),
                       "left" : (-1, 0),
                       "right" : (1, 0),
@@ -71,9 +78,9 @@ class Board(object):
         b.clear()
         newa.setcolor(acolor) 
         newb.setcolor(bcolor)
-        self.block.setblocks(newa, newb)
+        self.2block.setblocks(newa, newb)
 
-    def rotateblock(self):
+    def rotate2block(self):
         """
         Rotate the block. 
         """
@@ -85,8 +92,8 @@ class Board(object):
             ((Pos(0, 0), Pos(-1, -1)),
              (Pos(0, 1), Pos(-1, 0)))
         )
-        section = int(self.block.ishorizontal())
-        origin = self.block.blocks
+        section = int(self.2block.ishorizontal())
+        origin = self.2block.blocks
         for offset in transform[section]:
             try:
                 i = not section
@@ -99,7 +106,7 @@ class Board(object):
                 for b in newblocks:
                     if not b.isclear() and b.pos != origin[0].pos and b.pos != origin[1].pos:
                         raise InvalidOperation("New block is occupied.")
-                if self.block.ishorizontal():
+                if self.2block.ishorizontal():
                     # standard colors
                     colors = (origin[0].color, origin[1].color)
                 else:
@@ -109,7 +116,7 @@ class Board(object):
                 for k in range(0, 2):
                     origin[k].clear()
                     newblocks[k].setcolor(colors[k])
-                self.brick.setblocks(*newblocks)
+                self.2block.setblocks(*newblocks)
             except (OutOfBoard, InvalidOperation):
                 continue
             else:
@@ -236,7 +243,7 @@ class Board(object):
         """
         Check the collisions for matches.
         """
-        self.checkmatch(self.brick.blocks)
+        self.checkmatch(self.2block.blocks)
         while True:
             self.checkblocksinair()
             blocks = []
@@ -244,7 +251,7 @@ class Board(object):
                 blocks.extend(self.handlefallingblocks())
             if not self.checkmatch(blocks):
                 break
-        self.spawnbrick()
+        self.spawn2block()
 
     def render(self):
         self.display.fill(BLACK)
@@ -254,22 +261,22 @@ class Board(object):
         return self.display
 
     def renderblock(self, display, block):
-        if block.color == Color.CLEAR:
+        if block.color == Color.clear:
             return
-        elif block.color == Color.RED:
-            color = RED
-        elif block.color == Color.BLUE:
-            color = BLUE
-        elif block.color == Color.YELLOW:
-            color = YELLOW
+        elif block.color == Color.red:
+            color = red
+        elif block.color == Color.blue:
+            color = blue
+        elif block.color == Color.yellow:
+            color = yellow
         else:
             raise InvalidParameter("Block has invalid color: {}".format(block.color))
 
         display.fill(color,
                      (block.xpixels,
                       block.ypixels,
-                      drpython.block.WIDTH,
-                      drpython.block.HEIGHT))
+                      drmario.block.width,
+                      drmario.block.height))
 
     def block(self, x, y):
         if x < 0 or y < 0:
@@ -284,8 +291,8 @@ class Board(object):
             raise BottomReached("Bottom reached by block")
 
     @property
-    def brick(self):
-        return self.brick
+    def 2block(self):
+        return self.2block
 
     @property
     def display(self):
