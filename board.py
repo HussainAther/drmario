@@ -27,11 +27,11 @@ class Board(object):
             self.board.append([])
             for w in range(0, width):
                 self.board[h].append(Block(w, h))
-        self.brick = None
+        self.block = None
 
-    def spawnbricks(self):
+    def spawnblocks(self):
         """
-        Spawn the bricks from the spawn position.
+        Spawn the blocks from the spawn position.
         """
         blocks = (
                 self.block(spawnpos.x, spawnpos.y),
@@ -48,11 +48,11 @@ class Board(object):
         for i in (0, 1): # Set the block colors.
             blocks[i].setcolor(colors[i])
  
-    def movebrick(self, direction):
+    def moveblock(self, direction):
         """
-        Move the brick in a direction.
+        Move the block in a direction.
         """
-        a, b = self.brick.blocks
+        a, b = self.block.blocks
         directdict = {"down" : (0, 1),
                       "left" : (-1, 0),
                       "right" : (1, 0),
@@ -62,4 +62,27 @@ class Board(object):
             newa = self.block(a.x+x, a.y+y)
             newb = self.block(b.x+x, b.y+y)
         except (OutOfBoard, BottomReached) as e:
-            raise e 
+            raise e
+        if (newa != b and not newa.isclear()) or (newb != a nd not newb.isclear()):
+            raise PositionOccupied("Collision occured")
+        acolor = a.color
+        bcolor = b.color
+        a.clear()
+        b.clear()
+        newa.setcolor(acolor) 
+        newb.setcolor(bcolor)
+        self.block.setblocks(newa, newb)
+
+    def rotateblock(self):
+        """
+        Rotate the block. 
+        """
+        transform = (
+            # vertical to horizontal
+            ((Pos(1, 0), Pos(0, 1)),
+             (Pos(0, 0), Pos(-1, 1))),
+            # horizontal to vertical
+            ((Pos(0, 0), Pos(-1, -1)),
+             (Pos(0, 1), Pos(-1, 0)))
+        )
+ 
