@@ -5,7 +5,7 @@ import sys
 
 from board import Board
 from pygame.constants import KEYUP, KEYDOWN, K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP, QUIT 
-from colors import black, blue, darkblue, darkgray, red, white, yellow
+from colors import black, blue, brightred, brightgreen, darkblue, darkgray, green, red, white, yellow
 from utils import Pos
 
 fps = 60
@@ -19,6 +19,27 @@ boardborder = 1
 blockfallinterval = 300
 speedfallmultiplier = 100.0
 
+def gameintro(self):
+    intro = True
+    pygame.mixer.music.load("music/birabuto.wav")
+    pygame.mixer.music.play(-1)
+    while intro:
+        self._display.fill(black)
+        mouse = pygame.mouse.get_pos()
+        largeText = pygame.font.Font("freesansbold.ttf",115)
+        TextSurf, TextRect = text_objects("Dr. Mario", largeText)
+        TextRect.center = ((windowwidth/2),(windowheight/2))
+        self._display.blit(TextSurf, TextRect)
+        if 150+100 > mouse[0] > 150 and 450+50 > mouse[1] > 450:
+            pygame.draw.rect(self._display, bright_green,(150,450,100,50))
+        else:
+            pygame.draw.rect(self._display, green,(150,450,100,50))
+        pygame.draw.rect(self._display, red,(550,450,100,50))
+        pygame.display.update()
+
+def text_objects(text, font):
+    textSurface = font.render(text, True, black)
+    return textSurface, textSurface.get_rect()
 
 class Game(object):
     """
@@ -29,12 +50,13 @@ class Game(object):
     def __init__(self):
         self._board = Board()
         pygame.init()
-        pygame.mixer.music.load("music/fever.mp3")
-        pygame.mixer.music.play(-1)
-
+        pygame.mixer.init()
         self.fpsClock = pygame.time.Clock()
         self._display = pygame.display.set_mode((windowwidth, windowheight), 0, 32)
+        gameintro(self)
         pygame.display.set_caption("Dr. Mario!")
+        pygame.mixer.music.load("music/fever.wav")
+        pygame.mixer.music.play(-1)
         self.blockfalltimer = blockfallinterval
         self.speed = False
 
@@ -97,11 +119,15 @@ class Game(object):
         try:
             self.board.movedublock(direction)
         except (ex.OutOfBoard, ex.PositionOccupied):
-            # Simply ignore those, the dublock will not move at all.
+            # If we can't move to a certaain position,
+            # simply ignore those. The dublock will not move at all.
             pass
 
     @property
     def board(self):
+        """
+        Define the board property.
+        """
         return self._board
 
     @property
