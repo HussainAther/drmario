@@ -109,3 +109,13 @@ class Board(object):
                 for k in range(0, 2):
                     origin[k].clear()
                     newblocks[k].setcolor(colors[k])
+                self.brick.setblocks(*newblocks)
+            except (OutOfBoard, InvalidOperation):
+                continue
+            else:
+                break
+
+    def checkmatch(self, blocks):
+        """
+        If there's a match, make them disppear.
+        """
