@@ -1,7 +1,7 @@
 import random
 
 from pygame import Surface
-from src.block import block, color
+from src.block import block, Color
 from src.colors import black, blue, darkblue, darkgray, red, white, yellow
 from src.dublock import dublock
 from src.exceptions import BottomReached, InvalidOperation, InvalidParameter, OutOfBoard, PositionOccupied
@@ -25,15 +25,15 @@ class Board(object):
         """
         Initialize the display and board for the game.
         """
-        self.display = Surface((140, 400))
-        self.board = []
+        self._display = Surface((140, 400))
+        self._board = []
         for h in range(0, height):
-            self.board.append([])
+            self._board.append([])
             for w in range(0, width):
-                self.board[h].append(block(w, h))
-        self.dublock = None
+                self._board[h].append(block(w, h))
+        self._dublock = None
 
-    def spawndublocks(self):
+    def spawndublock(self):
         """
         Spawn the blocks from the spawn position.
         """
@@ -51,14 +51,15 @@ class Board(object):
                   random.randint(1, 3))
         for i in (0, 1): # Set the block colors.
             blocks[i].setcolor(colors[i])
-        self.dublocks = dublock(blocks)
+        self._dublocks = dublock(blocks)
           
     def movedublock(self, direction):
         """
         Move the block in a direction.
         """
-        a, b = self.dublock.blocks
-        directdict = {"down" : (0, 1),
+        a, b = self.dublock.blocks # Get the two individuals blocks of the 
+                                   # dublock.
+        directdict = {"down" : (0, 1), # Get the direction and how to move the block.
                       "left" : (-1, 0),
                       "right" : (1, 0),
                       "up" : (0, -1)}
@@ -76,7 +77,7 @@ class Board(object):
         b.clear()
         newa.setcolor(acolor) 
         newb.setcolor(bcolor)
-        self.dublock.setblocks(newa, newb)
+        self._dublock.setblocks(newa, newb)
 
     def rotatedublock(self):
         """
@@ -90,8 +91,8 @@ class Board(object):
             ((Pos(0, 0), Pos(-1, -1)),
              (Pos(0, 1), Pos(-1, 0)))
         )
-        section = int(self.dublock.ishorizontal())
-        origin = self.dublock.blocks
+        section = int(self._dublock.ishorizontal())
+        origin = self._dublock.blocks
         for offset in transform[section]:
             try:
                 i = not section
@@ -104,17 +105,17 @@ class Board(object):
                 for b in newblocks:
                     if not b.isclear() and b.pos != origin[0].pos and b.pos != origin[1].pos:
                         raise InvalidOperation("New block is occupied.")
-                if self.dublock.ishorizontal():
+                if self._dublock.ishorizontal():
                     # standard colors
-                    colors = (origin[0].color, origin[1].color)
+                    colors = (origin[0].Color, origin[1].Color)
                 else:
                     # swap colors
-                    colors = (origin[1].color, origin[0].color)
+                    colors = (origin[1].Color, origin[0].Color)
 
                 for k in range(0, 2):
                     origin[k].clear()
                     newblocks[k].setcolor(colors[k])
-                self.dublock.setblocks(*newblocks)
+                self._dublock.setblocks(*newblocks)
             except (OutOfBoard, InvalidOperation):
                 continue
             else:
@@ -208,7 +209,7 @@ class Board(object):
         Get the blocks that are falling by checking their
         .isfalling() status.
         """
-        return [block for rows in reversed(self.board)
+        return [block for rows in reversed(self._board)
                 for block in rows
                 if block.isfalling()]
     def handlefallingblocks(self):
@@ -241,7 +242,7 @@ class Board(object):
         """
         Check the collisions for matches.
         """
-        self.checkmatch(self.dublock.blocks)
+        self.checkmatch(self._dublock.blocks)
         while True:
             self.checkblocksinair()
             blocks = []
@@ -252,11 +253,11 @@ class Board(object):
         self.spawndublock()
 
     def render(self):
-        self.display.fill(BLACK)
-        for h in range(0, HEIGHT):
-            for w in range(0, WIDTH):
-                self.renderblock(self.display, self.block(w, h))
-        return self.display
+        self._display.fill(black)
+        for h in range(0, height):
+            for w in range(0, width):
+                self.renderblock(self._display, self.block(w, h))
+        return self._display
 
     def renderblock(self, display, block):
         if block.color == Color.clear:
@@ -280,9 +281,9 @@ class Board(object):
         if x < 0 or y < 0:
             raise OutOfBoard("Trying to get block at negative position")
 
-        if y <= len(self.board)-1:
-            if x <= len(self.board[y])-1:
-                return self.board[y][x]
+        if y <= len(self._board)-1:
+            if x <= len(self._board[y])-1:
+                return self._board[y][x]
             else:
                 raise OutOfBoard("Position ({}, {}) not on board".format(x, y))
         else:
@@ -290,8 +291,8 @@ class Board(object):
 
     @property
     def dublock(self):
-        return self.dublock
+        return self._dublock
 
     @property
     def display(self):
-        return self.display 
+        return self._display 
