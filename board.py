@@ -23,4 +23,17 @@ class Board(object):
         """
         self.display = pygame.Surface((widthpixels, heightpixels))
         self.board = []
-           
+        for h in range(0, height):
+            self.board.append([])
+            for w in range(0, width):
+                self.board[h].append(Block(w, h))
+        self.brick = None
+
+    def spawnbricks(self):
+        """
+        Spawn the bricks from the spawn position.
+        """
+        blocks = (
+                self.block(spawnpos.x, spawnpos.y),
+                self.block(spawnpos.x + 1, spawnpos.y),
+        )
