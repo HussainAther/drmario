@@ -1,5 +1,8 @@
 black = (0, 0, 0)
 blue = (43, 85, 117)
+brightred = (255,0,0)
+brightgreen = (0,255,0)
+green = (0, 200, 0)
 darkblue = (76, 48, 124)
 darkgray = (15, 15, 15)
 red = (182, 70, 58)
