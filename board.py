@@ -146,4 +146,48 @@ class Board(object):
         y = block.y + ydir
         while True:
             try:
-                 
+                nextblock = self.block(x, y)
+            except:
+                break
+            if nextblock.isclear()
+                break
+            matches.append(nextblock)
+            x += xdir
+            y += ydir
+        return matches 
+
+    def checkblocksinair(self):
+        """
+        If one part of a block is cleared, the second part should drop.
+        This function runs on all the blocks that have been changed. It
+        checks each block one by one.
+        """
+        while changed:
+            changed = False
+            for x in range(0, width):
+                for y in range(0, height):
+                    block = self.block(x, y)
+                    blockchanged = self.checkblockinair(block)
+                    if blockchanged:
+                        changed = True
+
+     def checkblockinair(self, block):
+         """
+         Check a single block in the air.
+         """
+         if block.isclear() or block.isfalling():
+             return False
+         try:
+             bottomblock = self.block(block.x, block.y+1)
+         except BottomReached as e:
+             return False
+         rightblock = None
+         leftblock = None
+         try:
+             rightblock = self.block(block.x+1, block.y+1)
+         except OutOfBoard as e:
+             pass
+         try:
+             leftblock = self.block(block.x-1, block.y-1)
+         except OutOfBoard:
+             pass     
