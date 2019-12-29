@@ -17,3 +17,10 @@ class Board(object):
     Define the class for the boards to include the block functions for
     spawning and falling.
     """
+    def __init__(self):
+        """
+        Initialize the display and board for the game.
+        """
+        self.display = pygame.Surface((widthpixels, heightpixels))
+        self.board = []
+           
