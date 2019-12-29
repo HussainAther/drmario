@@ -85,4 +85,14 @@ class Board(object):
             ((Pos(0, 0), Pos(-1, -1)),
              (Pos(0, 1), Pos(-1, 0)))
         )
- 
+        section = int(self.block.ishorizontal())
+        origin = self.block.blocks
+        for offset in transform[section]:
+            try:
+                i = not section
+                j = not i
+                newblocks = (
+                    self.block(origin[i].x + offset[i].x, origin[i].y + offset[i].y),
+                    self.block(origin[j].x + offset[j].x, origin[j].y + offset[j].y),
+
+                ) 
