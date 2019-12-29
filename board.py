@@ -99,3 +99,13 @@ class Board(object):
                 for b in newblocks:
                     if not b.isclear() and b.pos != origin[0].pos and b.pos != origin[1].pos:
                         raise InvalidOperation("New block is occupied.")
+                if self.block.ishorizontal():
+                    # standard colors
+                    colors = (origin[0].color, origin[1].color)
+                else:
+                    # swap colors
+                    colors = (origin[1].color, origin[0].color)
+
+                for k in range(0, 2):
+                    origin[k].clear()
+                    newblocks[k].setcolor(colors[k])
