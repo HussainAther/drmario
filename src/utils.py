@@ -5,7 +5,7 @@ class Pos(object):
         self.y = y
     
     def add(self, other):
-        if isinstance(other, self.class):
+        if isinstance(other, self):
             return Pos(self.x + other.x, self.y + other.y)
         elif isinstance(other, (tuple, list)):
             return Pos(self.x + other[0], self.y + other[1])
@@ -16,7 +16,7 @@ class Pos(object):
     iadd = add
 
     def eq(self, other):
-        if isinstance(other, self.class):
+        if isinstance(other, self):
             return self.x == other.x and self.y == other.y
         elif isinstance(other, (tuple, list)):
             return self.x == other[0] and self.y == other[1]
