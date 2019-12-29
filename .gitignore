@@ -1,2 +1,4 @@
 *.pyc
 src/game.pyc
+music
+.DS_Store
