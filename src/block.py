@@ -66,13 +66,13 @@ class block(object):
         """
         Get the information about a block.
         """
-        return "Block ({}, {}) color: {} falling: {}".format(self._x, self._y, self._color, self._falling)
+        return "Block ({}, {}) color: {} falling: {}".format(self.x, self.y, self.color, self._falling)
 
     def isclear(self):
         """
         Is the block clear?
         """
-        return self._color == Color.clear
+        return self.color == Color.clear
  
     def isfalling(self):
         """
@@ -100,21 +100,21 @@ class block(object):
         Get the number of pixels on the screen in the
         x-direction.
         """
-        return self._x*width
+        return self.x*width
  
     @property
     def ypixels(self):
         """
         In the y-direction 
         """
-        return self._y*height
+        return self.y*height
 
     @property
     def pos(self):
         """
         Get the current block position.
         """
-        return utils.Pos(self._x, self._y) 
+        return utils.Pos(self.x, self.y) 
 
     @property
     def color(self):
