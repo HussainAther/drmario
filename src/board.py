@@ -13,7 +13,6 @@ from utils import Pos
 Create the board. We want to use the blocks to fill up the board
 with a starting setup and allow blocks to fall as they do.
 """
-
 width = 10
 height = 20
 spawnpos = Pos(x=3, y=0)
@@ -27,7 +26,7 @@ class Board(object):
         """
         Initialize the display and board for the game.
         """
-        self._display = Surface((140, 400))
+        self._display = Surface((140, 300))
         self._board = []
         for h in range(0, height):
             self._board.append([])
