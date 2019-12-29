@@ -22,20 +22,25 @@ speedfallmultiplier = 100.0
 def gameintro(self):
     intro = True
     pygame.mixer.music.load("music/birabuto.wav")
-    pygame.mixer.music.play(-1)
+    pygame.mixer.music.play(0)
     while intro:
-        self._display.fill(black)
-        mouse = pygame.mouse.get_pos()
-        largeText = pygame.font.Font("freesansbold.ttf",115)
-        TextSurf, TextRect = text_objects("Dr. Mario", largeText)
-        TextRect.center = ((windowwidth/2),(windowheight/2))
-        self._display.blit(TextSurf, TextRect)
-        if 150+100 > mouse[0] > 150 and 450+50 > mouse[1] > 450:
-            pygame.draw.rect(self._display, bright_green,(150,450,100,50))
-        else:
-            pygame.draw.rect(self._display, green,(150,450,100,50))
-        pygame.draw.rect(self._display, red,(550,450,100,50))
+        win = pygame.display.set_mode((400, 400))
+        win.fill((0,0,0))
+        titlefont = pygame.font.SysFont("Times New Roman", 36, bold = True) 
+        instructionfont = pygame.font.SysFont("Times New Roman", 24, bold = True) 
+        startfont = pygame.font.SysFont("Times New Roman", 24, bold = True) 
+        title = titlefont.render("Dr. Mario", 36, (255, 255, 255))
+        instruction1 = instructionfont.render("Use arrow keys to move", 1, (255, 255, 255))
+        instruction2 = instructionfont.render("and space to rotate.", 1, (255, 255, 255))
+        starttext = startfont.render("Press space to start.", 1, (255, 255, 255))
+        self._display.blit(title, (20, 100))
+        self._display.blit(instruction1, (20, 150))
+        self._display.blit(instruction2, (20, 200))
+        self._display.blit(starttext, (20, 300))
         pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == KEYDOWN and event.key == K_SPACE:
+                intro = False
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -54,7 +59,6 @@ class Game(object):
         self.fpsClock = pygame.time.Clock()
         self._display = pygame.display.set_mode((windowwidth, windowheight), 0, 32)
         gameintro(self)
-        pygame.display.set_caption("Dr. Mario!")
         pygame.mixer.music.load("music/fever.wav")
         pygame.mixer.music.play(-1)
         self.blockfalltimer = blockfallinterval
