@@ -3,7 +3,7 @@ import random
 
 from src.exceptions import BottomReached, InvalidOperation, InvalidParameter, OutOfBoard, PositionOccupied
 from src.block import block, color
-from src.2block import 2block
+from src.dublock import dublock
 from src.colors import black, blue, darkblue, darkgray, red, white, yellow
 from src.utils import Pos
 
@@ -33,9 +33,9 @@ class Board(object):
             self.board.append([])
             for w in range(0, width):
                 self.board[h].append(block(w, h))
-        self.2block = None
+        self.dublock = None
 
-    def spawn2blocks(self):
+    def spawndublocks(self):
         """
         Spawn the blocks from the spawn position.
         """
@@ -53,13 +53,13 @@ class Board(object):
                   random.randint(1, 3))
         for i in (0, 1): # Set the block colors.
             blocks[i].setcolor(colors[i])
-        self.2blocks = 2block(blocks)
+        self.dublocks = dublock(blocks)
           
-    def move2block(self, direction):
+    def movedublock(self, direction):
         """
         Move the block in a direction.
         """
-        a, b = self.2block.blocks
+        a, b = self.dublock.blocks
         directdict = {"down" : (0, 1),
                       "left" : (-1, 0),
                       "right" : (1, 0),
@@ -70,7 +70,7 @@ class Board(object):
             newb = self.block(b.x+x, b.y+y)
         except (OutOfBoard, BottomReached) as e:
             raise e
-        if (newa != b and not newa.isclear()) or (newb != a nd not newb.isclear()):
+        if (newa != b and not newa.isclear()) or (newb != a and not newb.isclear()):
             raise PositionOccupied("Collision occured")
         acolor = a.color
         bcolor = b.color
@@ -78,9 +78,9 @@ class Board(object):
         b.clear()
         newa.setcolor(acolor) 
         newb.setcolor(bcolor)
-        self.2block.setblocks(newa, newb)
+        self.dublock.setblocks(newa, newb)
 
-    def rotate2block(self):
+    def rotatedublock(self):
         """
         Rotate the block. 
         """
@@ -92,8 +92,8 @@ class Board(object):
             ((Pos(0, 0), Pos(-1, -1)),
              (Pos(0, 1), Pos(-1, 0)))
         )
-        section = int(self.2block.ishorizontal())
-        origin = self.2block.blocks
+        section = int(self.dublock.ishorizontal())
+        origin = self.dublock.blocks
         for offset in transform[section]:
             try:
                 i = not section
@@ -106,7 +106,7 @@ class Board(object):
                 for b in newblocks:
                     if not b.isclear() and b.pos != origin[0].pos and b.pos != origin[1].pos:
                         raise InvalidOperation("New block is occupied.")
-                if self.2block.ishorizontal():
+                if self.dublock.ishorizontal():
                     # standard colors
                     colors = (origin[0].color, origin[1].color)
                 else:
@@ -116,7 +116,7 @@ class Board(object):
                 for k in range(0, 2):
                     origin[k].clear()
                     newblocks[k].setcolor(colors[k])
-                self.2block.setblocks(*newblocks)
+                self.dublock.setblocks(*newblocks)
             except (OutOfBoard, InvalidOperation):
                 continue
             else:
@@ -142,7 +142,7 @@ class Board(object):
                     for nextblock in matches:
                         nextblock.clear()
                     block.clear()
-       return match
+        return match
 
     def getmatchesindirection(self, block, xdir, ydir):
         """
@@ -156,7 +156,7 @@ class Board(object):
                 nextblock = self.block(x, y)
             except:
                 break
-            if nextblock.isclear()
+            if nextblock.isclear():
                 break
             matches.append(nextblock)
             x += xdir
@@ -178,32 +178,32 @@ class Board(object):
                     if blockchanged:
                         changed = True
 
-     def checkblockinair(self, block):
-         """
-         Check a single block in the air.
-         """
-         if block.isclear() or block.isfalling():
-             return False
-         try:
-             bottomblock = self.block(block.x, block.y+1)
-         except BottomReached as e:
-             return False
-         rightblock = None
-         leftblock = None
-         try:
-             rightblock = self.block(block.x+1, block.y+1)
-         except OutOfBoard as e:
-             pass
-         try:
-             leftblock = self.block(block.x-1, block.y-1)
-         except OutOfBoard:
-             pass    
-         if (bottomblock.isclear() or bottomblock.isfalliang()) and \
-              (not rightblock or rightblock.isclear()) and \
-              (not leftblock or leftblock.isclear()):
-             block.setfalling(True)
-             return True
-         return False
+    def checkblockinair(self, block):
+        """
+        Check a single block in the air.
+        """
+        if block.isclear() or block.isfalling():
+            return False
+        try:
+            bottomblock = self.block(block.x, block.y+1)
+        except BottomReached as e:
+            return False
+        rightblock = None
+        leftblock = None
+        try:
+            rightblock = self.block(block.x+1, block.y+1)
+        except OutOfBoard as e:
+            pass
+        try:
+            leftblock = self.block(block.x-1, block.y-1)
+        except OutOfBoard:
+            pass    
+        if (bottomblock.isclear() or bottomblock.isfalliang()) and \
+             (not rightblock or rightblock.isclear()) and \
+             (not leftblock or leftblock.isclear()):
+            block.setfalling(True)
+            return True
+        return False
 
     def getfallingblocks(self):
         """
@@ -243,7 +243,7 @@ class Board(object):
         """
         Check the collisions for matches.
         """
-        self.checkmatch(self.2block.blocks)
+        self.checkmatch(self.dublock.blocks)
         while True:
             self.checkblocksinair()
             blocks = []
@@ -251,7 +251,7 @@ class Board(object):
                 blocks.extend(self.handlefallingblocks())
             if not self.checkmatch(blocks):
                 break
-        self.spawn2block()
+        self.spawndublock()
 
     def render(self):
         self.display.fill(BLACK)
@@ -291,8 +291,8 @@ class Board(object):
             raise BottomReached("Bottom reached by block")
 
     @property
-    def 2block(self):
-        return self.2block
+    def dublock(self):
+        return self.dublock
 
     @property
     def display(self):
