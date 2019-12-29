@@ -1,12 +1,12 @@
+import board
+import ex
 import pygame
 import sys
 
-from pygame.constants import *
-from src.board import Board
-from src.exceptions import BottomReached, InvalidOperation, InvalidParameter, OutOfBoard, PositionOccupied
-from src.colors import black, blue, darkblue, darkgray, red, white, yellow
-from src.utils import Pos
-
+from board import Board
+from pygame.constants import KEYUP, KEYDOWN, K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP, QUIT 
+from colors import black, blue, darkblue, darkgray, red, white, yellow
+from utils import Pos
 
 fps = 60
 windowwidth = 400
@@ -24,17 +24,14 @@ class Game(object):
     def __init__(self):
         self._board = Board()
         pygame.init()
-
         self.fpsClock = pygame.time.Clock()
         self._display = pygame.display.set_mode((windowwidth, windowheight), 0, 32)
         pygame.display.set_caption("Dr. Mario!")
-
         self.blockfalltimer = blockfallinterval
-
         self.speed = False
 
     def run(self):
-        self._board.spawndublock()
+        self.board.spawndublock()
 
         while True:
             for event in pygame.event.get():
@@ -48,7 +45,7 @@ class Game(object):
                              (boardoffsetx-boardborder, boardoffsety-boardborder,
                               140+boardborder*2,
                               400+boardborder*2))
-            boarddisplay = self._board.render()
+            boarddisplay = self.board.render()
             self._display.blit(boarddisplay, (boardoffsetx, boardoffsety))
 
             pygame.display.update()
@@ -58,8 +55,8 @@ class Game(object):
 
         if self.blockfalltimer <= 0:
             try:
-                self._board.movedublock("down")
-            except (BottomReached, PositionOccupied):
+                self.board.movedublock("down")
+            except (ex.BottomReached, ex.PositionOccupied):
                 self.handlecollision()
 
             self.blockfalltimer = blockfallinterval
@@ -70,29 +67,29 @@ class Game(object):
             self.blockfalltimer -= delta
 
     def handlecollision(self):
-        self._board.handlecollision()
+        self.board.handlecollision()
 
     def processevent(self, event):
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
         elif event.type == KEYDOWN:
-            if event.key == KLEFT or event.key == KRIGHT:
-                direction = "left" if event.key == KLEFT else "right"
+            if event.key == K_LEFT or event.key == K_RIGHT:
+                direction = "left" if event.key == K_LEFT else "right"
                 self.movedublock(direction)
-            elif event.key == KDOWN:
+            elif event.key == K_DOWN:
                 self.speed = True
-            elif event.key == KSPACE:
-                self._board.rotatebrick()
+            elif event.key == K_SPACE:
+                self.board.rotatedublock()
         elif event.type == KEYUP:
-            if event.key == KDOWN:
+            if event.key == K_DOWN:
                 self.speed = False
 
     def movedublock(self, direction):
         try:
-            self._board.movedublock(direction)
-        except (OutOfBoard, PositionOccupied):
-            # Simply ignore those, the brick will not move at all
+            self.board.movedublock(direction)
+        except (ex.OutOfBoard, ex.PositionOccupied):
+            # Simply ignore those, the dublock will not move at all.
             pass
 
     @property
