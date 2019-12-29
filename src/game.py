@@ -1,12 +1,12 @@
 import pygame
 import sys
 
+from pygame.constants import *
 from src.board import Board
 from src.exceptions import BottomReached, InvalidOperation, InvalidParameter, OutOfBoard, PositionOccupied
 from src.colors import black, blue, darkblue, darkgray, red, white, yellow
 from src.utils import Pos
 
-from pygame.constants import *
 
 fps = 60
 windowwidth = 400
@@ -22,34 +22,34 @@ speedfallmultiplier = 100.0
 class Game(object):
 
     def __init__(self):
-        self.board = Board()
+        self._board = Board()
         pygame.init()
 
         self.fpsClock = pygame.time.Clock()
-#         self.display = pygame.display.setmode((windowwidth, windowheight), 0, 32)
-        pygame.display.setcaption("Dr. Mario!")
+        self._display = pygame.display.set_mode((windowwidth, windowheight), 0, 32)
+        pygame.display.set_caption("Dr. Mario!")
 
         self.blockfalltimer = blockfallinterval
 
         self.speed = False
 
     def run(self):
-        self.board.spawnbrick()
+        self._board.spawndublock()
 
         while True:
             for event in pygame.event.get():
                 self.processevent(event)
 
-            self.update(self.fpsclock.gettime())
+            self.update(self.fpsclock.get_time())
 
-            self.display.fill(darkgray)
+            self._display.fill(darkgray)
 
-            pygame.draw.rect(self.display, darkblue,
+            pygame.draw.rect(self._display, darkblue,
                              (boardoffsetx-boardborder, boardoffsety-boardborder,
                               140+boardborder*2,
                               400+boardborder*2))
-            boarddisplay = self.board.render()
-            self.display.blit(boarddisplay, (boardoffsetx, boardoffsety))
+            boarddisplay = self._board.render()
+            self._display.blit(boarddisplay, (boardoffsetx, boardoffsety))
 
             pygame.display.update()
             self.fpsclock.tick(fps)
@@ -58,7 +58,7 @@ class Game(object):
 
         if self.blockfalltimer <= 0:
             try:
-                self.board.movebrick("down")
+                self._board.movedublock("down")
             except (BottomReached, PositionOccupied):
                 self.handlecollision()
 
@@ -70,7 +70,7 @@ class Game(object):
             self.blockfalltimer -= delta
 
     def handlecollision(self):
-        self.board.handlecollision()
+        self._board.handlecollision()
 
     def processevent(self, event):
         if event.type == QUIT:
@@ -79,29 +79,29 @@ class Game(object):
         elif event.type == KEYDOWN:
             if event.key == KLEFT or event.key == KRIGHT:
                 direction = "left" if event.key == KLEFT else "right"
-                self.movebrick(direction)
+                self.movedublock(direction)
             elif event.key == KDOWN:
                 self.speed = True
             elif event.key == KSPACE:
-                self.board.rotatebrick()
+                self._board.rotatebrick()
         elif event.type == KEYUP:
             if event.key == KDOWN:
                 self.speed = False
 
-    def movebrick(self, direction):
+    def movedublock(self, direction):
         try:
-            self.board.movebrick(direction)
+            self._board.movedublock(direction)
         except (OutOfBoard, PositionOccupied):
             # Simply ignore those, the brick will not move at all
             pass
 
     @property
     def board(self):
-        return self.board
+        return self._board
 
     @property
     def display(self):
-        return self.display
+        return self._display
 
     @property
     def fpsclock(self):
