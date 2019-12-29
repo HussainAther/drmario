@@ -1,3 +1,6 @@
+import ex
+import utils
+
 width = 20
 height = 14
 
@@ -42,9 +45,9 @@ class block(object):
         another color.
         """
         if self._color != Color.clear:
-            raise InvalidOperation("Trying to set color on a colored block.")
+            raise ex.InvalidOperation("Trying to set color on a colored block.")
         if color != Color.blue and color != Color.red and color != Color.yellow:
-            raise InvalidParameter("Invalid color value: {}".format(color))
+            raise ex.InvalidParameter("Invalid color value: {}".format(color))
         self._color = color
 
     def clear(self):
@@ -111,7 +114,7 @@ class block(object):
         """
         Get the current block position.
         """
-        return Pos(self._x, self._y) 
+        return utils.Pos(self._x, self._y) 
 
     @property
     def color(self):
