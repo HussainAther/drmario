@@ -14,8 +14,8 @@ with a starting setup and allow blocks to fall as they do.
 
 width = 10
 height = 20
-widthpixels = width*drmario.block.width
-heightpixels = height*drmario.block.height
+widthpixels = width*src.block.width
+heightpixels = height*src.block.height
 spawnpos = Pos(x=3, y=0)
 
 class Board(object):
@@ -275,8 +275,8 @@ class Board(object):
         display.fill(color,
                      (block.xpixels,
                       block.ypixels,
-                      drmario.block.width,
-                      drmario.block.height))
+                      src.block.width,
+                      src.block.height))
 
     def block(self, x, y):
         if x < 0 or y < 0:
