@@ -119,3 +119,31 @@ class Board(object):
         """
         If there's a match, make them disppear.
         """
+        match = False
+        for block in blocks:
+            if block.isclear():
+                continue # If the block is cleared, we need to see what 
+                         # it matched to.
+            # Check the horizontal and vertical directions to get the matches.
+            horizontal = set(self.getmatchesindirection(block, 1, 0) + self.getmatchesindirection(block, -1, 0))
+            vertical = set(self.getmatchesindirection(block, 0, 1) + self.getmatchesindirection(block, 0, 1))
+            for matches in (horizontal, vertical):
+                # For the matches, check if they're 3 or more blocks.
+                # If they are, they disappear.
+                if len(matches) >= 3:
+                    match = True
+                    for nextblock in matches:
+                        nextblock.clear()
+                    block.clear()
+       return match
+
+    def getmatchesindirection(self, block, xdir, ydir):
+        """
+        Get the matches in the x and y directions. 
+        """
+        matches = []
+        x = block.x + xdir
+        y = block.y + ydir
+        while True:
+            try:
+                 
