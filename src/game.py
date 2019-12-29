@@ -22,25 +22,25 @@ speedfallmultiplier = 100.0
 class Game(object):
 
     def __init__(self):
-        self._board = Board()
+        self.board = Board()
         pygame.init()
 
-        self._fpsClock = pygame.time.Clock()
-        self._display = pygame.display.set_mode((windowwidth, windowheight), 0, 32)
-        pygame.display.set_caption("Dr. Mario!")
+        self.fpsClock = pygame.time.Clock()
+        self.display = pygame.display.setmode((windowwidth, windowheight), 0, 32)
+        pygame.display.setcaption("Dr. Mario!")
 
-        self._block_fall_timer = blockfallinterval
+        self.blockfalltimer = blockfallinterval
 
-        self._speed = False
+        self.speed = False
 
     def run(self):
-        self.board.spawn_brick()
+        self.board.spawnbrick()
 
         while True:
             for event in pygame.event.get():
-                self.process_event(event)
+                self.processevent(event)
 
-            self.update(self.fps_clock.get_time())
+            self.update(self.fpsclock.gettime())
 
             self.display.fill(darkgray)
 
@@ -48,61 +48,61 @@ class Game(object):
                              (boardoffsetx-boardborder, boardoffsety-boardborder,
                               140+boardborder*2,
                               400+boardborder*2))
-            board_display = self.board.render()
-            self.display.blit(board_display, (boardoffsetx, boardoffsety))
+            boarddisplay = self.board.render()
+            self.display.blit(boarddisplay, (boardoffsetx, boardoffsety))
 
             pygame.display.update()
-            self.fps_clock.tick(fps)
+            self.fpsclock.tick(fps)
 
     def update(self, delta):
 
-        if self._block_fall_timer <= 0:
+        if self.blockfalltimer <= 0:
             try:
-                self.board.move_brick("down")
+                self.board.movebrick("down")
             except (BottomReached, PositionOccupied):
-                self.handle_collision()
+                self.handlecollision()
 
-            self._block_fall_timer = blockfallinterval
+            self.blockfalltimer = blockfallinterval
         else:
-            if self._speed:
+            if self.speed:
                 delta *= speedfallmultiplier
 
-            self._block_fall_timer -= delta
+            self.blockfalltimer -= delta
 
-    def handle_collision(self):
-        self.board.handle_collision()
+    def handlecollision(self):
+        self.board.handlecollision()
 
-    def process_event(self, event):
+    def processevent(self, event):
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
         elif event.type == KEYDOWN:
-            if event.key == K_LEFT or event.key == K_RIGHT:
-                direction = "left" if event.key == K_LEFT else "right"
-                self.move_brick(direction)
-            elif event.key == K_DOWN:
-                self._speed = True
-            elif event.key == K_SPACE:
-                self.board.rotate_brick()
+            if event.key == KLEFT or event.key == KRIGHT:
+                direction = "left" if event.key == KLEFT else "right"
+                self.movebrick(direction)
+            elif event.key == KDOWN:
+                self.speed = True
+            elif event.key == KSPACE:
+                self.board.rotatebrick()
         elif event.type == KEYUP:
-            if event.key == K_DOWN:
-                self._speed = False
+            if event.key == KDOWN:
+                self.speed = False
 
-    def move_brick(self, direction):
+    def movebrick(self, direction):
         try:
-            self.board.move_brick(direction)
+            self.board.movebrick(direction)
         except (OutOfBoard, PositionOccupied):
             # Simply ignore those, the brick will not move at all
             pass
 
     @property
     def board(self):
-        return self._board
+        return self.board
 
     @property
     def display(self):
-        return self._display
+        return self.display
 
     @property
-    def fps_clock(self):
-        return self._fpsClock
+    def fpsclock(self):
+        return self.fpsClock
