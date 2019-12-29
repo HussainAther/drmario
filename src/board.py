@@ -1,11 +1,13 @@
+import block
+import dublock
+import ex
 import random
 
 from pygame import Surface
-from src.block import block, Color
-from src.colors import black, blue, darkblue, darkgray, red, white, yellow
-from src.dublock import dublock
-from src.exceptions import BottomReached, InvalidOperation, InvalidParameter, OutOfBoard, PositionOccupied
-from src.utils import Pos
+from block import block, Color
+from colors import black, blue, darkblue, darkgray, red, white, yellow
+from dublock import dublock
+from utils import Pos
 
 """
 Create the board. We want to use the blocks to fill up the board
@@ -46,12 +48,12 @@ class Board(object):
             if not block.isclear(): # Block must be clear when they spawn.
                                     # If not, then you lose the game because you've
                                     # reached the top. 
-                raise PositionOccupied("Block is not clear at spawn point.")
+                raise ex.PositionOccupied("Block is not clear at spawn point.")
         colors = (random.randint(1, 3), # Choose the block colors.
                   random.randint(1, 3))
         for i in (0, 1): # Set the block colors.
             blocks[i].setcolor(colors[i])
-        self._dublocks = dublock(blocks)
+        self._dublock = dublock(blocks)
           
     def movedublock(self, direction):
         """
@@ -67,17 +69,17 @@ class Board(object):
         try: # Check if we've reached the bottom of the board.
             newa = self.block(a.x+x, a.y+y)
             newb = self.block(b.x+x, b.y+y)
-        except (OutOfBoard, BottomReached) as e:
+        except (ex.OutOfBoard, ex.BottomReached) as e:
             raise e
         if (newa != b and not newa.isclear()) or (newb != a and not newb.isclear()):
-            raise PositionOccupied("Collision occured")
+            raise ex.PositionOccupied("Collision occured")
         acolor = a.color
         bcolor = b.color
         a.clear()
         b.clear()
         newa.setcolor(acolor) 
         newb.setcolor(bcolor)
-        self._dublock.setblocks(newa, newb)
+        self.dublock.setblocks(newa, newb)
 
     def rotatedublock(self):
         """
@@ -104,7 +106,7 @@ class Board(object):
                 # Don't overwrite blocks.
                 for b in newblocks:
                     if not b.isclear() and b.pos != origin[0].pos and b.pos != origin[1].pos:
-                        raise InvalidOperation("New block is occupied.")
+                        raise ex.InvalidOperation("New block is occupied.")
                 if self._dublock.ishorizontal():
                     # standard colors
                     colors = (origin[0].Color, origin[1].Color)
@@ -116,7 +118,7 @@ class Board(object):
                     origin[k].clear()
                     newblocks[k].setcolor(colors[k])
                 self._dublock.setblocks(*newblocks)
-            except (OutOfBoard, InvalidOperation):
+            except (ex.OutOfBoard, ex.InvalidOperation):
                 continue
             else:
                 break
@@ -168,6 +170,7 @@ class Board(object):
         This function runs on all the blocks that have been changed. It
         checks each block one by one.
         """
+        changed = True
         while changed:
             changed = False
             for x in range(0, width):
@@ -185,19 +188,19 @@ class Board(object):
             return False
         try:
             bottomblock = self.block(block.x, block.y+1)
-        except BottomReached as e:
+        except ex.BottomReached as e:
             return False
         rightblock = None
         leftblock = None
         try:
             rightblock = self.block(block.x+1, block.y+1)
-        except OutOfBoard as e:
+        except ex.OutOfBoard as e:
             pass
         try:
             leftblock = self.block(block.x-1, block.y-1)
-        except OutOfBoard:
+        except ex.OutOfBoard:
             pass    
-        if (bottomblock.isclear() or bottomblock.isfalliang()) and \
+        if (bottomblock.isclear() or bottomblock.isfalling()) and \
              (not rightblock or rightblock.isclear()) and \
              (not leftblock or leftblock.isclear()):
             block.setfalling(True)
@@ -223,7 +226,7 @@ class Board(object):
         for block in blocks:
             try:
                 bottomblock = self.block(block.x, block.y+1)
-            except BottomReached:
+            except ex.BottomReached:
                 blocksatbottom.append(block)
                 block.setfalling(False)
                 continue
@@ -269,7 +272,7 @@ class Board(object):
         elif block.color == Color.yellow:
             color = yellow
         else:
-            raise InvalidParameter("Block has invalid color: {}".format(block.color))
+            raise ex.InvalidParameter("Block has invalid color: {}".format(block.color))
 
         display.fill(color,
                      (block.xpixels,
@@ -279,15 +282,15 @@ class Board(object):
 
     def block(self, x, y):
         if x < 0 or y < 0:
-            raise OutOfBoard("Trying to get block at negative position")
+            raise ex.OutOfBoard("Trying to get block at negative position")
 
         if y <= len(self._board)-1:
             if x <= len(self._board[y])-1:
                 return self._board[y][x]
             else:
-                raise OutOfBoard("Position ({}, {}) not on board".format(x, y))
+                raise ex.OutOfBoard("Position ({}, {}) not on board".format(x, y))
         else:
-            raise BottomReached("Bottom reached by block")
+            raise ex.BottomReached("Bottom reached by block")
 
     @property
     def dublock(self):
