@@ -26,7 +26,7 @@ class Game(object):
         pygame.init()
 
         self.fpsClock = pygame.time.Clock()
-        self.display = pygame.display.setmode((windowwidth, windowheight), 0, 32)
+#         self.display = pygame.display.setmode((windowwidth, windowheight), 0, 32)
         pygame.display.setcaption("Dr. Mario!")
 
         self.blockfalltimer = blockfallinterval
