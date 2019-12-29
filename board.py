@@ -17,7 +17,7 @@ class Board(object):
     Define the class for the boards to include the block functions for
     spawning and falling.
     """
-    def __init__(self):
+    def init(self):
         """
         Initialize the display and board for the game.
         """
@@ -205,4 +205,88 @@ class Board(object):
         """
         return [block for rows in reversed(self.board)
                 for block in rows
-                if block.isfalling()] 
+                if block.isfalling()]
+    def handlefallingblocks(self):
+        """
+        Check the falling blocks.
+        """
+        blocks = self.getfallingblocks()
+        if not blocks:
+            return []
+        blocksatbottom = []
+        for block in blocks:
+            try:
+                bottomblock = self.block(block.x, block.y+1)
+            except BottomReached:
+                blocksatbottom.append(block)
+                block.setfalling(False)
+                continue
+
+            if bottomblock.isclear():
+                bottomblock.setcolor(block.color)
+                bottomblock.setfalling(True)
+                block.clear()
+                block.setfalling(False)
+            else:
+                blocksatbottom.append(block)
+                block.setfalling(False)
+        return blocksatbottom
+
+    def handlecollision(self):
+        """
+        Check the collisions for matches.
+        """
+        self.checkmatch(self.brick.blocks)
+        while True:
+            self.checkblocksinair()
+            blocks = []
+            while self.getfallingblocks():
+                blocks.extend(self.handlefallingblocks())
+            if not self.checkmatch(blocks):
+                break
+        self.spawnbrick()
+
+    def render(self):
+        self.display.fill(BLACK)
+        for h in range(0, HEIGHT):
+            for w in range(0, WIDTH):
+                self.renderblock(self.display, self.block(w, h))
+        return self.display
+
+    def renderblock(self, display, block):
+        if block.color == Color.CLEAR:
+            return
+        elif block.color == Color.RED:
+            color = RED
+        elif block.color == Color.BLUE:
+            color = BLUE
+        elif block.color == Color.YELLOW:
+            color = YELLOW
+        else:
+            raise InvalidParameter("Block has invalid color: {}".format(block.color))
+
+        display.fill(color,
+                     (block.xpixels,
+                      block.ypixels,
+                      drpython.block.WIDTH,
+                      drpython.block.HEIGHT))
+
+    def block(self, x, y):
+        if x < 0 or y < 0:
+            raise OutOfBoard("Trying to get block at negative position")
+
+        if y <= len(self.board)-1:
+            if x <= len(self.board[y])-1:
+                return self.board[y][x]
+            else:
+                raise OutOfBoard("Position ({}, {}) not on board".format(x, y))
+        else:
+            raise BottomReached("Bottom reached by block")
+
+    @property
+    def brick(self):
+        return self.brick
+
+    @property
+    def display(self):
+        return self.display 
