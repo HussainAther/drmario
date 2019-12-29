@@ -24,4 +24,7 @@ class Pos(object):
             raise TypeError("Unknown object in Pos eq")
 
     def ne(self, other):
+        """
+        When the two aren't equal.
+        """
         return not self.eq(other)
