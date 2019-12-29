@@ -8,7 +8,7 @@ import sys
 
 # Import the Board class from the board.py file, the keyboard functions
 # from pygame, the colors from colors.py, and the Pos (position) function from 
-# utils.py
+# utils.py.
 from board import Board
 from pygame.constants import KEYUP, KEYDOWN, K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP, K_q, QUIT 
 from colors import black, blue, brightred, brightgreen, darkblue, darkgray, green, red, white, yellow
@@ -23,7 +23,7 @@ boardoffsetx = (windowwidth - 140) / 2
 boardoffsety = (windowheight - 400) / 2
 boardborder = 1 # border thickness
 
-blockfallinterval = 300
+blockfallinterval = 300 # time before the block falls automatically 
 speedfallmultiplier = 100.0
 
 def gameintro(self):
