@@ -27,6 +27,8 @@ class block(object):
         """
         Initialize a cleared empty block.
         """
+        self.width = 20
+        self.height = 14
         self.x = x
         self.y = y
         self.color = Color.CLEAR
