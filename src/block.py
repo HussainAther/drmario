@@ -8,7 +8,7 @@ properties of the blocks themselves that can be used later for creating
 vitamins.
 """
 
-class color(object):
+class Color(object):
     """
     Give the object a color depending on how it spawns
     and how it touches another block.
@@ -29,10 +29,10 @@ class block(object):
         """
         self.width = 20
         self.height = 14
-        self.x = x
-        self.y = y
-        self.color = Color.CLEAR
-        self.falling = False
+        self._x = x
+        self._y = y
+        self._color = Color.clear
+        self._falling = False
         if color:
             self.setcolor(color)
 
@@ -41,54 +41,55 @@ class block(object):
         Set the color of the block from clear to
         another color.
         """
-        if self.color != Color.clear:
+        if self._color != Color.clear:
             raise InvalidOperation("Trying to set color on a colored block.")
-        if color != Color.blue and color != color.red and color != color.yellow:
+        if color != Color.blue and color != Color.red and color != Color.yellow:
             raise InvalidParameter("Invalid color value: {}".format(color))
+        self._color = color
 
     def clear(self):
         """
         Clear the color.
         """
-        self.color = Color.clear
+        self._color = Color.clear
 
     def setfalling(self, falling):
         """
         Set a piece as falling.
         """
-        self.falling = falling
+        self._falling = falling
 
     def __repr__(self):
         """
         Get the information about a block.
         """
-        return "Block ({}, {}) color: {} falling: {}".format(self.x, self.y, self.color, self.falling)
+        return "Block ({}, {}) color: {} falling: {}".format(self._x, self._y, self._color, self._falling)
 
     def isclear(self):
         """
         Is the block clear?
         """
-        return self.color == color.clear
+        return self._color == Color.clear
  
     def isfalling(self):
         """
         Is the block falling?
         """
-        return self.falling
+        return self._falling
 
     @property
     def x(self):
         """
         Return x-coordinate of the block.
         """
-        return self.x
+        return self._x
 
     @property
     def y(self):
         """
         Return y-coordinate of the block.
         """
-        return self.y
+        return self._y
 
     @property
     def xpixels(self):
@@ -96,25 +97,25 @@ class block(object):
         Get the number of pixels on the screen in the
         x-direction.
         """
-        return self.x*width
+        return self._x*width
  
     @property
     def ypixels(self):
         """
         In the y-direction 
         """
-        return self.y*height
+        return self._y*height
 
     @property
     def pos(self):
         """
         Get the current block position.
         """
-        return Pos(self.x, self.y) 
+        return Pos(self._x, self._y) 
 
     @property
     def color(self):
         """
         Get the block color.
         """
-        return self.color
+        return self._color
