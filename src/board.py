@@ -63,8 +63,7 @@ class Board(object):
                                    # dublock.
         directdict = {"down" : (0, 1), # Get the direction and how to move the block.
                       "left" : (-1, 0),
-                      "right" : (1, 0),
-                      "up" : (0, -1)}
+                      "right" : (1, 0)}
         (x, y) = directdict[direction]
         try: # Check if we've reached the bottom of the board.
             newa = self.block(a.x+x, a.y+y)
@@ -83,7 +82,7 @@ class Board(object):
 
     def rotatedublock(self):
         """
-        Rotate the block. 
+        Rotate the dublock. 
         """
         transform = (
             # vertical to horizontal
@@ -93,8 +92,8 @@ class Board(object):
             ((Pos(0, 0), Pos(-1, -1)),
              (Pos(0, 1), Pos(-1, 0)))
         )
-        section = int(self._dublock.ishorizontal())
-        origin = self._dublock.blocks
+        section = int(self.dublock.ishorizontal())
+        origin = self.dublock.blocks
         for offset in transform[section]:
             try:
                 i = not section
@@ -104,21 +103,22 @@ class Board(object):
                     self.block(origin[j].x + offset[j].x, origin[j].y + offset[j].y),
                 ) 
                 # Don't overwrite blocks.
-                for b in newblocks:
-                    if not b.isclear() and b.pos != origin[0].pos and b.pos != origin[1].pos:
-                        raise ex.InvalidOperation("New block is occupied.")
-                if self._dublock.ishorizontal():
+#                for b in newblocks:
+#                    if not (b.isclear() and b.pos != origin[0].pos and b.pos != origin[1].pos):
+#                        raise ex.InvalidOperation("New block is occupied.")
+
+                if self.dublock.ishorizontal():
                     # standard colors
-                    colors = (origin[0].Color, origin[1].Color)
+                    colors = (origin[0].color, origin[1].color)
                 else:
                     # swap colors
-                    colors = (origin[1].Color, origin[0].Color)
+                    colors = (origin[1].color, origin[0].color)
 
                 for k in range(0, 2):
                     origin[k].clear()
                     newblocks[k].setcolor(colors[k])
-                self._dublock.setblocks(*newblocks)
-            except (ex.OutOfBoard, ex.InvalidOperation):
+                self.dublock.setblocks(*newblocks)
+            except (ex.OutOfBoard, ex.InvalidOperation) as e:
                 continue
             else:
                 break
@@ -198,7 +198,7 @@ class Board(object):
             pass
         try:
             leftblock = self.block(block.x-1, block.y-1)
-        except ex.OutOfBoard:
+        except ex.OutOfBoard as e:
             pass    
         if (bottomblock.isclear() or bottomblock.isfalling()) and \
              (not rightblock or rightblock.isclear()) and \
@@ -215,6 +215,7 @@ class Board(object):
         return [block for rows in reversed(self._board)
                 for block in rows
                 if block.isfalling()]
+
     def handlefallingblocks(self):
         """
         Check the falling blocks.
