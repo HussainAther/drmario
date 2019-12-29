@@ -19,11 +19,19 @@ boardborder = 1
 blockfallinterval = 300
 speedfallmultiplier = 100.0
 
-class Game(object):
 
+class Game(object):
+    """
+    This is the class for the game itself. It's the main class that controls the 
+    other parts of the game. It's in charge of the basic, fundamental functions and 
+    processes that the game needs.
+    """
     def __init__(self):
         self._board = Board()
         pygame.init()
+        pygame.mixer.music.load("music/fever.mp3")
+        pygame.mixer.music.play(-1)
+
         self.fpsClock = pygame.time.Clock()
         self._display = pygame.display.set_mode((windowwidth, windowheight), 0, 32)
         pygame.display.set_caption("Dr. Mario!")
