@@ -14,18 +14,22 @@ from pygame.constants import KEYUP, KEYDOWN, K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K
 from colors import black, blue, brightred, brightgreen, darkblue, darkgray, green, red, white, yellow
 from utils import Pos
 
-fps = 60
-windowwidth = 400
-windowheight = 400
+fps = 60 # frames per second
+windowwidth = 400 # width of the overall window 
+windowheight = 400 # height of the window
 
+# where the Dr. Mario game box will be
 boardoffsetx = (windowwidth - 140) / 2
 boardoffsety = (windowheight - 400) / 2
-boardborder = 1
+boardborder = 1 # border thickness
 
 blockfallinterval = 300
 speedfallmultiplier = 100.0
 
 def gameintro(self):
+    """
+    Display the menu until the user starts the game.
+    """
     intro = True
     pygame.mixer.music.load("music/birabuto.wav")
     pygame.mixer.music.play(0)
@@ -33,8 +37,8 @@ def gameintro(self):
         win = pygame.display.set_mode((400, 400))
         win.fill((0,0,0))
         titlefont = pygame.font.SysFont("Times New Roman", 36, bold = True) 
-        instructionfont = pygame.font.SysFont("Times New Roman", 24, bold = True) 
-        startfont = pygame.font.SysFont("Times New Roman", 24, bold = True) 
+        instructionfont = pygame.font.SysFont("Times New Roman", 24) 
+        startfont = pygame.font.SysFont("Times New Roman", 24) 
         title = titlefont.render("Dr. Mario", 36, (255, 255, 255))
         instruction1 = instructionfont.render("Use arrow keys to move", 1, (255, 255, 255))
         instruction2 = instructionfont.render("and space to rotate.", 1, (255, 255, 255))
@@ -51,6 +55,9 @@ def gameintro(self):
                 intro = False
 
 def text_objects(text, font):
+    """
+    Create a rectangular object around which to put text.
+    """
     textSurface = font.render(text, True, black)
     return textSurface, textSurface.get_rect()
 
@@ -94,18 +101,15 @@ class Game(object):
             self.fpsclock.tick(fps)
 
     def update(self, delta):
-
         if self.blockfalltimer <= 0:
             try:
                 self.board.movedublock("down")
             except (ex.BottomReached, ex.PositionOccupied):
                 self.handlecollision()
-
             self.blockfalltimer = blockfallinterval
         else:
             if self.speed:
                 delta *= speedfallmultiplier
-
             self.blockfalltimer -= delta
 
     def handlecollision(self):
@@ -134,7 +138,7 @@ class Game(object):
         try:
             self.board.movedublock(direction)
         except (ex.OutOfBoard, ex.PositionOccupied):
-            # If we can't move to a certaain position,
+            # If we can't move to a certain position,
             # simply ignore those. The dublock will not move at all.
             pass
 
@@ -147,8 +151,14 @@ class Game(object):
 
     @property
     def display(self):
+        """
+        Define the display property for the actual pygame display.
+        """
         return self._display
 
     @property
     def fpsclock(self):
+        """
+        This is a neat clock based on the fps.
+        """
         return self.fpsClock
