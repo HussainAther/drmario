@@ -3,7 +3,7 @@ class Pos(object):
     def init(self, x, y):
         self.x = x
         self.y = y
-
+    
     def add(self, other):
         if isinstance(other, self.class):
             return Pos(self.x + other.x, self.y + other.y)
