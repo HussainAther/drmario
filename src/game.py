@@ -9,11 +9,11 @@ from src.utils import Pos
 from pygame.constants import *
 
 fps = 60
-windowwith = 400
+windowwidth = 400
 windowheight = 400
 
-boardoffsetx = (windowwidth - drmario.board.widthpixels) / 2
-boardoffsety = (windowheight - drmario.board.heightpixels) / 2
+boardoffsetx = (windowwidth - 140) / 2
+boardoffsety = (windowheight - 400) / 2
 boardborder = 1
 
 blockfallinterval = 300
@@ -46,8 +46,8 @@ class Game(object):
 
             pygame.draw.rect(self.display, darkblue,
                              (boardoffsetx-boardborder, boardoffsety-boardborder,
-                              drmario.board.widthpixels+boardborder*2,
-                              drmario.board.heightpixels+boardborder*2))
+                              140+boardborder*2,
+                              400+boardborder*2))
             board_display = self.board.render()
             self.display.blit(board_display, (boardoffsetx, boardoffsety))
 

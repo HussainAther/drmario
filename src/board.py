@@ -1,10 +1,10 @@
 import pygame
 import random
 
-from src.exceptions import BottomReached, InvalidOperation, InvalidParameter, OutOfBoard, PositionOccupied
 from src.block import block, color
-from src.dublock import dublock
 from src.colors import black, blue, darkblue, darkgray, red, white, yellow
+from src.dublock import dublock
+from src.exceptions import BottomReached, InvalidOperation, InvalidParameter, OutOfBoard, PositionOccupied
 from src.utils import Pos
 
 """
@@ -14,8 +14,8 @@ with a starting setup and allow blocks to fall as they do.
 
 width = 10
 height = 20
-widthpixels = width * 14
-heightpixels = height * 20
+widthpixels = 140
+heightpixels = 400
 spawnpos = Pos(x=3, y=0)
 
 class Board(object):
@@ -23,11 +23,11 @@ class Board(object):
     Define the class for the boards to include the block functions for
     spawning and falling.
     """
-    def init(self):
+    def __init__(self):
         """
         Initialize the display and board for the game.
         """
-        self.display = pygame.Surface((widthpixels, heightpixels))
+        self.display = pygame.Surface((140, 400))
         self.board = []
         for h in range(0, height):
             self.board.append([])
