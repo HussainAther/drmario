@@ -37,3 +37,29 @@ class Board(object):
                 self.block(spawnpos.x, spawnpos.y),
                 self.block(spawnpos.x + 1, spawnpos.y),
         )
+
+        for block in blocks:
+            if not block.isclear(): # Block must be clear when they spawn.
+                                    # If not, then you lose the game because you've
+                                    # reached the top. 
+                raise PositionOccupied("Block is not clear at spawn point.")
+        colors = (random.randint(1, 3), # Choose the block colors.
+                  random.randint(1, 3))
+        for i in (0, 1): # Set the block colors.
+            blocks[i].setcolor(colors[i])
+ 
+    def movebrick(self, direction):
+        """
+        Move the brick in a direction.
+        """
+        a, b = self.brick.blocks
+        directdict = {"down" : (0, 1),
+                      "left" : (-1, 0),
+                      "right" : (1, 0),
+                      "up" : (0, -1)}
+        (x, y) = directdict[direction]
+        try: # Check if we've reached the bottom of the board.
+            newa = self.block(a.x+x, a.y+y)
+            newb = self.block(b.x+x, b.y+y)
+        except (OutOfBoard, BottomReached) as e:
+            raise e 
