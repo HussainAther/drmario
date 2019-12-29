@@ -94,5 +94,8 @@ class Board(object):
                 newblocks = (
                     self.block(origin[i].x + offset[i].x, origin[i].y + offset[i].y),
                     self.block(origin[j].x + offset[j].x, origin[j].y + offset[j].y),
-
                 ) 
+                # Don't overwrite blocks.
+                for b in newblocks:
+                    if not b.isclear() and b.pos != origin[0].pos and b.pos != origin[1].pos:
+                        raise InvalidOperation("New block is occupied.")
