@@ -1,6 +1,6 @@
-class 2block(object):
+class dublock(object):
     """
-    A block made of 2 square parts.
+    A dublock is a block made of 2 square parts.
     """
     def init(self, blocks):
         self.blocks = blocks
