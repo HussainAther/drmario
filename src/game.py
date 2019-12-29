@@ -1,8 +1,14 @@
+# Import the functionality of other files.
 import board
 import ex
+
+# Import installed modules.
 import pygame
 import sys
 
+# Import the Board class from the board.py file, the keyboard functions
+# from pygame, the colors from colors.py, and the Pos (position) function from 
+# utils.py
 from board import Board
 from pygame.constants import KEYUP, KEYDOWN, K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP, QUIT 
 from colors import black, blue, brightred, brightgreen, darkblue, darkgray, green, red, white, yellow
