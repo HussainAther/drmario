@@ -2,15 +2,15 @@ class dublock(object):
     """
     A dublock is a block made of 2 square parts.
     """
-    def init(self, blocks):
-        self.blocks = blocks
+    def __init__(self, blocks):
+        self._blocks = blocks
 
     def setblocks(self, blocka, blockb):
-        self.blocks = (blocka, blockb)
+        self._blocks = (blocka, blockb)
 
     @property
     def blocks(self):
-        return self.blocks
+        return self._blocks
 
     def ishorizontal(self):
         return self.blocks[0].y == self.blocks[1].y
