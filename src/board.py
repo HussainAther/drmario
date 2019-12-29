@@ -3,16 +3,17 @@ import dublock
 import ex
 import random
 
-from pygame import Surface
 from block import block, Color
 from colors import black, blue, darkblue, darkgray, red, white, yellow
 from dublock import dublock
+from pygame import Surface
 from utils import Pos
 
 """
 Create the board. We want to use the blocks to fill up the board
 with a starting setup and allow blocks to fall as they do.
 """
+
 width = 10
 height = 20
 spawnpos = Pos(x=3, y=0)
@@ -30,7 +31,7 @@ class Board(object):
         self._board = []
         for h in range(0, height):
             self._board.append([])
-            for w in range(0, width):
+            for w in range(0, width-3):
                 self._board[h].append(block(w, h))
         self._dublock = None
 
@@ -172,7 +173,7 @@ class Board(object):
         changed = True
         while changed:
             changed = False
-            for x in range(0, width):
+            for x in range(0, width-3):
                 for y in range(0, height):
                     block = self.block(x, y)
                     blockchanged = self.checkblockinair(block)
@@ -258,7 +259,7 @@ class Board(object):
     def render(self):
         self._display.fill(black)
         for h in range(0, height):
-            for w in range(0, width):
+            for w in range(0, width-3):
                 self.renderblock(self._display, self.block(w, h))
         return self._display
 
