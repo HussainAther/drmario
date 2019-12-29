@@ -35,7 +35,7 @@ def gameintro(self):
         starttext = startfont.render("Press space to start.", 1, (255, 255, 255))
         self._display.blit(title, (20, 100))
         self._display.blit(instruction1, (20, 150))
-        self._display.blit(instruction2, (20, 200))
+        self._display.blit(instruction2, (20, 170))
         self._display.blit(starttext, (20, 300))
         pygame.display.update()
         for event in pygame.event.get():
