@@ -1,3 +1,5 @@
+import pygame
+
 class dublock(object):
     """
     A dublock is a block made of 2 square parts, blocka and blockb.
@@ -5,6 +7,7 @@ class dublock(object):
     """
     def __init__(self, blocks):
         self._blocks = blocks
+        pygame.sprite.Sprite.__init___(self)
         
     def loadimage(name, colorkey=None):
         """
