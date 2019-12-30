@@ -1,6 +1,7 @@
 class dublock(object):
     """
-    A dublock is a block made of 2 square parts.
+    A dublock is a block made of 2 square parts, blocka and blockb.
+    This is the vitamin of Dr. Mario that the player controls.
     """
     def __init__(self, blocks):
         self._blocks = blocks
