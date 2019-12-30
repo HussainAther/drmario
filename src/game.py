@@ -107,7 +107,8 @@ class Game(object):
             scorefont = pygame.font.Font(None, 36)
             scoretext = scorefont.render(str(self._board.score), 14, white)
             self._display.blit(scoretext, (10, 200))
-            self._display.blit(scoretext, (10, 200))
+            drmariomenu = pygame.image.load("img/drmariomenu.bmp") 
+            self._display.blit(drmariomenu, (20, 50)) 
             pygame.display.update()
             self.fpsclock.tick(fps)
 
