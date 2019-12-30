@@ -78,6 +78,10 @@ class Game(object):
         pygame.mixer.music.play(-1)
         self.blockfalltimer = blockfallinterval
         self.speed = False
+        scorefont = pygame.font.Font(None, 36)
+        scoretext = scorefont.render(str(self._board.score), 14, white)
+        self._display.blit(scoretext, (10, 200))
+        pygame.display.update()
 
     def run(self):
         self.board.spawndublock()
@@ -96,7 +100,10 @@ class Game(object):
                               400+boardborder*2))
             boarddisplay = self.board.render()
             self._display.blit(boarddisplay, (boardoffsetx, boardoffsety))
-
+            scorefont = pygame.font.Font(None, 36)
+            scoretext = scorefont.render(str(self._board.score), 14, white)
+            self._display.blit(scoretext, (10, 200))
+            self._display.blit(scoretext, (10, 200))
             pygame.display.update()
             self.fpsclock.tick(fps)
 

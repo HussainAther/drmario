@@ -33,6 +33,7 @@ class Board(object):
             self._board.append([])
             for w in range(0, width-3):
                 self._board[h].append(block(w, h))
+        self.score = 0
         self._dublock = None
 
     def spawndublock(self):
@@ -141,6 +142,7 @@ class Board(object):
                 if len(matches) >= 3:
                     match = True
                     for nextblock in matches:
+                        self.score += 10
                         nextblock.clear()
                     block.clear()
         return match
