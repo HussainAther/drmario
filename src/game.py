@@ -49,6 +49,10 @@ def gameintro(self):
         self._display.blit(instruction2, (20, 170))
         self._display.blit(starttext1, (20, 300))
         self._display.blit(starttext2, (20, 320))
+        drmariomenu = pygame.image.load("img/drmariomenu.bmp") 
+        self._display.blit(drmariomenu, (20, 50)) 
+        nursemenu = pygame.image.load("img/nurse.bmp") 
+        self._display.blit(nursemenu, (50, 40)) 
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == KEYDOWN and event.key == K_SPACE:
