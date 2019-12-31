@@ -55,6 +55,22 @@ class Board(object):
         for i in (0, 1): # Set the block colors.
             blocks[i].setcolor(colors[i])
         self._dublock = dublock(blocks)
+
+    def getorient(self):
+        """
+        Get the orientation of each block in the dublock (megavitamin).
+        This is used for sprite purposes.
+        """
+        a, b = self.dublock.blocks # Get the two individuals blocks of the 
+                                   # dublock.
+        if a.y < b.y:
+            return ("bottom", "top")
+        elif a.y > b.y:
+            return ("top", "bottom")
+        elif a.x < b.x:
+            return ("left", "right") 
+        elif a.x > b.x:
+            return ("right", "left")
           
     def movedublock(self, direction):
         """
