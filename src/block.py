@@ -1,4 +1,6 @@
 import ex
+import os
+import pygame
 import utils
 
 """
@@ -36,17 +38,35 @@ class block(object):
         self._falling = False
         if color:
             self.setcolor(color)
+    
+   def loadimage(self, name):
+        """
+        Load the sprite from the img folder.
+        """
+        fullname = os.path.join("img", "megavitamin", name)
+        try:
+            image = pygame.image.load(fullname)
+        except pygame.error as message:
+            print("Cannot load image:", name)
+            raise SystemExit(message)
+        image = image.convert()
+        return image
 
     def setcolor(self, color):
         """
-        Set the color of the block from clear to
-        another color.
+        Set the color of the block to another color.
         """
         if self._color != Color.clear:
             raise ex.InvalidOperation("Trying to set color on a colored block.")
         if color != Color.blue and color != Color.red and color != Color.yellow:
             raise ex.InvalidParameter("Invalid color value: {}".format(color))
         self._color = color
+
+    def setimage(self, color, orient):
+        """
+        For a color and orientation, set and load the image.
+        """
+        return loadimage(str(orient) + str(color) + str.bmp))
 
     def clear(self):
         """
