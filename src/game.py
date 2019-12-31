@@ -104,6 +104,8 @@ class Game(object):
                               400+boardborder*2))
             boarddisplay = self.board.render()
             self._display.blit(boarddisplay, (boardoffsetx, boardoffsety))
+            for direction in self.board.getorient():
+                print(direction)
             scorefont = pygame.font.Font(None, 36)
             scoretext = scorefont.render(str(self._board.score), 14, white)
             self._display.blit(scoretext, (10, 200))
@@ -123,6 +125,23 @@ class Game(object):
             if self.speed:
                 delta *= speedfallmultiplier
             self.blockfalltimer -= delta
+
+    def loadimage(name, colorkey=None):
+        """
+        Load the sprite from the img folder.
+        """
+        fullname = os.path.join("img", name)
+        try:
+            image = pygame.image.load(fullname)
+        except pygame.error as message:
+            print("Cannot load image:", name)
+            raise SystemExit(message)
+        image = image.convert()
+        if colorkey is not None:
+            if colorkey is -1:
+                colorkey = image.get_at((0, 0))
+            image.set_colorkey(colorkey, RLEACCEL)
+        return image, image.get_rect()
 
     def handlecollision(self):
         self.board.handlecollision()
