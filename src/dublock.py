@@ -16,16 +16,3 @@ class dublock(object):
     def ishorizontal(self):
         return self.blocks[0].y == self.blocks[1].y
  
-    def getorient(self):
-        """
-        Get the orientation of each block in the dublock (megavitamin).
-        This is used for sprite purposes.
-        """
-        if self.blocks[0].y < self.blocks[1].y:
-            return ("bottom", "top")
-        elif self.blocks[1].y < self.blocks[0].y:
-            return ("top", "bottom")
-        elif self.blocks[0].x < self.blocks[1].x:
-            return ("left", "right") 
-        elif self.blocks[1].x < self.blocks[0].x:
-            return ("right", "left")
