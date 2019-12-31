@@ -35,7 +35,7 @@ class Board(object):
                 self._board[h].append(block(w, h))
         self.score = 0
         self._dublock = None
-
+    
     def spawndublock(self):
         """
         Spawn the blocks from the spawn position.
@@ -56,22 +56,6 @@ class Board(object):
             blocks[i].setcolor(colors[i])
         self._dublock = dublock(blocks)
 
-    def getorient(self):
-        """
-        Get the orientation of each block in the dublock (megavitamin).
-        This is used for sprite purposes.
-        """
-        a, b = self.dublock.blocks # Get the two individuals blocks of the 
-                                   # dublock.
-        if a.y < b.y:
-            return ("bottom", "top")
-        elif a.y > b.y:
-            return ("top", "bottom")
-        elif a.x < b.x:
-            return ("left", "right") 
-        elif a.x > b.x:
-            return ("right", "left")
-          
     def movedublock(self, direction):
         """
         Move the block in a direction.
@@ -96,6 +80,7 @@ class Board(object):
         newa.setcolor(acolor) 
         newb.setcolor(bcolor)
         self.dublock.setblocks(newa, newb)
+        self.dublock.getsprite()
 
     def rotatedublock(self):
         """
@@ -119,7 +104,7 @@ class Board(object):
                     self.block(origin[i].x + offset[i].x, origin[i].y + offset[i].y),
                     self.block(origin[j].x + offset[j].x, origin[j].y + offset[j].y),
                 ) 
-                # Don't overwrite blocks.
+#                # Don't overwrite blocks.
 #                for b in newblocks:
 #                    if not (b.isclear() and b.pos != origin[0].pos and b.pos != origin[1].pos):
 #                        raise ex.InvalidOperation("New block is occupied.")
